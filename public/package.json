@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@chainlink/env-enc": "^1.0.5",
+    "@chainlink/functions-toolkit": "^0.3.2",
+    "ethers": "^5.7.2",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  }
+}
