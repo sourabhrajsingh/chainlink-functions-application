@@ -1,20 +1,18 @@
-// calculate geometric mean off-chain by a DON then return the result
-// valures provided in args array
+// Parse the array of numbers from the args
+const numbers = args.map(Number); // Assume args is an array of numbers passed from the contract
 
-console.log(`calculate geometric mean of ${args}`);
+// Calculate the mean (average) of the numbers
+const mean = numbers.reduce((acc, num) => acc + num, 0) / numbers.length;
 
-// make sure arguments are provided
-if (!args || args.length === 0) throw new Error("input not provided");
+// Calculate the sum of the squared differences from the mean
+const squaredDiffs = numbers.map((num) => Math.pow(num - mean, 2));
 
-const product = args.reduce((accumulator, currentValue) => {
-  const numValue = parseInt(currentValue);
-  if (isNaN(numValue)) throw Error(`${currentValue} is not a number`);
-  return accumulator * numValue;
-}, 1); // calculate the product of numbers provided in args array
+// Calculate the variance
+const variance =
+  squaredDiffs.reduce((acc, diff) => acc + diff, 0) / numbers.length;
 
-const geometricMean = Math.pow(product, 1 / args.length); // geometric mean = length-root of (product)
-console.log(`geometric mean is: ${geometricMean.toFixed(2)}`);
+// Calculate the standard deviation (square root of variance)
+const standardDeviation = Math.sqrt(variance);
 
-// Decimals are not handled in Solidity so multiply by 100 (for 2 decimals) and round to the nearest integer
-// Functions.encodeUint256: Return a buffer from uint256
-return Functions.encodeUint256(Math.round(geometricMean * 100));
+// Return the standard deviation rounded and encoded as a uint256 for Solidity
+return Functions.encodeUint256(Math.round(standardDeviation * 100)); // Multiplied by 100 to preserve precision
